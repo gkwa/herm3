@@ -1,11 +1,25 @@
 package core
 
 import (
+	"fmt"
+
 	"github.com/go-logr/logr"
 )
 
-func Hello(logger logr.Logger) {
-	logger.V(1).Info("Debug: Entering Hello function")
-	logger.Info("Hello, World!")
-	logger.V(1).Info("Debug: Exiting Hello function")
+type Department interface {
+	GetName() string
+}
+
+type Company struct {
+	PrimaryDepartment Department
+}
+
+func (c *Company) DisplayInfo() {
+	fmt.Printf("Company's primary department: %s\n", c.PrimaryDepartment.GetName())
+}
+
+func Main(logger logr.Logger) {
+	logger.V(1).Info("Debug: Entering Main function")
+	myCompany := &Company{}
+	myCompany.DisplayInfo()
 }
