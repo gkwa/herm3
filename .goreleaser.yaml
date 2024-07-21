@@ -1,0 +1,62 @@
+before:
+  hooks:
+  - go mod tidy
+  - go generate ./...
+builds:
+- env:
+  - CGO_ENABLED=0
+  goos:
+  - linux
+  - windows
+  - darwin
+  main: main.go
+  goarch:
+  - amd64
+  binary: herm3
+  id: herm3
+  ldflags:
+  - -s -w
+    -X "github.com/gkwa/herm3/version.Version={{ .Version }}"
+    -X "github.com/gkwa/herm3/version.Date={{ .CommitDate }}"
+    -X "github.com/gkwa/herm3/version.GoVersion={{ .Env.GOVERSION }}"
+    -X "github.com/gkwa/herm3/version.ShortGitSHA={{ .ShortCommit }}"
+    -X "github.com/gkwa/herm3/version.FullGitSHA={{ .FullCommit }}"
+archives:
+- format: tar.gz
+  name_template: |-
+    herm3_ {{- title .Os }}_ {{- if eq .Arch "amd64" }}x86_64
+                               {{- else if eq .Arch "386" }}i386
+                               {{- else }}
+                               {{ .Arch }}
+                               {{ end }}
+                               {{- if .Arm }}v{{ .Arm }}{{ end }}
+  format_overrides:
+  - goos: windows
+    format: zip
+checksum:
+  name_template: checksums.txt
+snapshot:
+  name_template: '{{ incpatch .Version }}-next'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+brews:
+- name: herm3
+  directory: Formula
+  homepage: https://github.com/gkwa/herm3
+  repository:
+    owner: gkwa
+    name: homebrew-tools
+    branch: main
+scoops:
+- name: herm3
+  homepage: https://github.com/gkwa/herm3
+  description: "Description of the herm3 project"
+  license: MIT
+  repository:
+    owner: gkwa
+    name: scoop-bucket
+    branch: master
