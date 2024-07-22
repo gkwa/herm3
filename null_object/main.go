@@ -1,4 +1,4 @@
-package core
+package null_object
 
 import (
 	"fmt"
@@ -10,8 +10,18 @@ type Department interface {
 	GetName() string
 }
 
+type NullDepartment struct{}
+
+func (d NullDepartment) GetName() string {
+	return "No Department"
+}
+
 type Company struct {
 	PrimaryDepartment Department
+}
+
+func NewCompany() *Company {
+	return &Company{PrimaryDepartment: NullDepartment{}}
 }
 
 func (c *Company) DisplayInfo() {
@@ -20,6 +30,6 @@ func (c *Company) DisplayInfo() {
 
 func Main(logger logr.Logger) {
 	logger.V(1).Info("Debug: Entering Main function")
-	myCompany := &Company{}
-	myCompany.DisplayInfo()
+	company := NewCompany()
+	company.DisplayInfo()
 }
