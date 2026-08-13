@@ -2,7 +2,7 @@ module github.com/gkwa/herm3
 
 go 1.26.0
 
-toolchain go1.26.5
+toolchain go1.26.6
 
 require (
 	github.com/fatih/color v1.19.0
